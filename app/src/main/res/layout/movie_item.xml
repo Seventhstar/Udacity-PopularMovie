@@ -26,7 +26,7 @@
         android:background="@android:color/darker_gray"
         android:backgroundTint="@android:color/darker_gray"
         android:padding="3dp"
-        android:text="movie"
+        android:text="@string/text_movie"
         android:textAlignment="center"
         android:textColor="@android:color/white" />
 

@@ -13,12 +13,8 @@ import com.squareup.picasso.Picasso;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by rm on 21.03.2018.
- */
-
+@SuppressWarnings("WeakerAccess")
 public class MovieDetailActivity extends AppCompatActivity {
-
     public static final String EXTRA_MOVIE = "EXTRA_MOVIE";
 
     @BindView(R.id.movie_title)
@@ -56,11 +52,12 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         Movie movie = getIntent().getParcelableExtra(EXTRA_MOVIE);
         movieTitle.setText(movie.getTitle());
-        movieRating.setText("Rating: " + movie.getRating());
+
+        movieRating.setText(getString(R.string.detail_rating_head,  movie.getRating()));
         movieYear.setText(movie.getYear());
-        movieReleaseDate.setText("Release date: " + movie.getReleaseDate(this));
+        movieReleaseDate.setText( getString(R.string.release_date_head, movie.getReleaseDate()) );
         movieOverview.setText(movie.getOverview());
-        moviePopularity.setText("Popularity: " + movie.getPopularity());
+        moviePopularity.setText(getString(R.string.popularity_head, movie.getPopularity()));
 
         Picasso.with(this)
                 .load(movie.getOriginalURL())

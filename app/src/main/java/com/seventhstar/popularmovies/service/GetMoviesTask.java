@@ -1,5 +1,6 @@
 package com.seventhstar.popularmovies.service;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
@@ -20,16 +21,12 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-/**
- * Created by rm on 21.03.2018.
- */
-
 public class GetMoviesTask extends AsyncTask<Void, Void, List<Movie>> {
     private final static String BASE_URL = "http://api.themoviedb.org/";
     private final static String API_VERSION = "3";
-    private String mSortBy;
-    private String mApiKey;
-    private MainActivity context;
+    private final String mSortBy;
+    private final String mApiKey;
+    private final Context context;
 
     private final TaskCompleteNotify mCommand;
 
@@ -50,7 +47,7 @@ public class GetMoviesTask extends AsyncTask<Void, Void, List<Movie>> {
     }
 
     public static class TaskCompleteNotify implements Command {
-        private GetMoviesTask.Listener mListener;
+        private final GetMoviesTask.Listener mListener;
         private List<Movie> moviesList;
 
         public TaskCompleteNotify(GetMoviesTask.Listener listener) {
@@ -89,7 +86,7 @@ public class GetMoviesTask extends AsyncTask<Void, Void, List<Movie>> {
         try {
             Response<Movies> response = call.execute();
             Movies movies = response.body();
-            return movies.getMovies();
+            return movies != null ? movies.getMovies() : null;
 
         } catch (IOException e) {
             Toast.makeText(context, context.getResources().getString(R.string.api_movie_db_problem), Toast.LENGTH_SHORT).show();

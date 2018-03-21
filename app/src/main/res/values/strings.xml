@@ -5,7 +5,19 @@
     <string name="top_rated">top rated</string>
     <string name="movie_image_description">image</string>
     <string name="detail_error_message">Movie data not available</string>
-    <string name="missing_release_date">missing</string>
     <string name="api_movie_db_problem">A problem occurred talking to the movie db</string>
     <string name="poster">poster</string>
+    <string name="text_movie_title">movie title</string>
+    <string name="text_year">year</string>
+    <string name="text_popularity">popularity</string>
+    <string name="text_rating">rating</string>
+    <string name="text_description">Description</string>
+    <string name="text_movie_description">movie description</string>
+    <string name="text_genres_title">Genres:</string>
+    <string name="text_genres">genre1, genre 2</string>
+    <string name="text_release_date">release date</string>
+    <string name="text_movie">movie</string>
+    <string name="release_date_head">Release date: %1$s</string>
+    <string name="detail_rating_head">Rating: %1$s</string>
+    <string name="popularity_head">Popularity: %1$s</string>
 </resources>

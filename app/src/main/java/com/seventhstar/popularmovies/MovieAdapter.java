@@ -16,17 +16,13 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by rm on 20.03.2018.
- */
-
 class MovieAdapter extends ArrayAdapter<Movie> {
     private List<Movie> moviesList;
-    private Context context;
+    private final Context context;
     private final Callbacks callbacks;
 
     public interface Callbacks {
-        void openMovie(Movie movie, int position);
+        void openMovie(Movie movie);
     }
 
     public MovieAdapter(MainActivity mainActivity) {
@@ -61,11 +57,14 @@ class MovieAdapter extends ArrayAdapter<Movie> {
         ImageView imageView = convertView.findViewById(R.id.movie_poster);
 
         TextView versionNameView = convertView.findViewById(R.id.flavor_text);
-        versionNameView.setText(movie.getTitle());
+        versionNameView.setText(movie != null ? movie.getTitle() : "");
 
-        Picasso.with(context)
-                .load(movie.getPreviewURL())
-                .into(imageView);
+        String url = movie != null ? movie.getPreviewURL() : null;
+        if (url != null) {
+            Picasso.with(context)
+                    .load(url)
+                    .into(imageView);
+        }
 
         cell = convertView;
         cell.setId(position);
@@ -74,7 +73,7 @@ class MovieAdapter extends ArrayAdapter<Movie> {
             @Override
             public void onClick(View v) {
                 Movie movie = getItem(cell.getId());
-                callbacks.openMovie(movie, cell.getId());
+                callbacks.openMovie(movie);
             }
         });
 

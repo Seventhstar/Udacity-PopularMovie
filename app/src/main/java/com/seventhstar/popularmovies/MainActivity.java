@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void openMovie(Movie movie, int position) {
+    public void openMovie(Movie movie) {
         Intent intent = new Intent(this, MovieDetailActivity.class);
         intent.putExtra(MovieDetailActivity.EXTRA_MOVIE, movie);
         startActivity(intent);

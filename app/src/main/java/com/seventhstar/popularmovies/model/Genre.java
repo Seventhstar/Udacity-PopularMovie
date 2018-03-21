@@ -5,10 +5,7 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by rm on 21.03.2018.
- */
-
+@SuppressWarnings({"CanBeFinal", "unused"})
 public class Genre implements Parcelable {
 
     @SerializedName("id")
