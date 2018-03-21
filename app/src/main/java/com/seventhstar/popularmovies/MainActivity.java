@@ -17,6 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
+@SuppressWarnings("WeakerAccess")
 public class MainActivity extends AppCompatActivity implements
         GetMoviesTask.Listener, MovieAdapter.Callbacks {
 
