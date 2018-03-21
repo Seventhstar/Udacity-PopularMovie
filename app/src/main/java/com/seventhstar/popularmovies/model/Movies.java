@@ -10,14 +10,10 @@ import java.util.List;
  */
 
 public class Movies {
-
         @SerializedName("results")
         private List<Movie> moviesList = new ArrayList<>();
 
         public List<Movie> getMovies() {
             return moviesList;
         }
-
-
-
 }

@@ -6,6 +6,7 @@
     android:layout_width="wrap_content"
     android:layout_height="@dimen/movie_item_height"
     android:clickable="true"
+    android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
     android:orientation="vertical">
 
@@ -18,9 +19,15 @@
         tools:src="@drawable/n1" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/flavor_text"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:alpha=".8"
+        android:background="@android:color/darker_gray"
+        android:backgroundTint="@android:color/darker_gray"
+        android:padding="3dp"
+        android:text="movie"
         android:textAlignment="center"
-        android:id="@+id/flavor_text"/>
+        android:textColor="@android:color/white" />
 
 </FrameLayout>

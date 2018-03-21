@@ -1,24 +1,27 @@
 package com.seventhstar.popularmovies;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.GridView;
 
+import com.seventhstar.popularmovies.model.Movie;
 import com.seventhstar.popularmovies.service.Command;
 import com.seventhstar.popularmovies.service.GetMoviesTask;
 
 
-public class MainActivity extends AppCompatActivity implements GetMoviesTask.Listener{
+public class MainActivity extends AppCompatActivity implements
+        GetMoviesTask.Listener, MovieAdapter.Callbacks {
 
-    public final static String POPULAR = "popular";
-    public final static String TOP_RATED = "top_rated";
+    private final static String POPULAR = "popular";
+    private final static String TOP_RATED = "top_rated";
 
     private String mSortBy = POPULAR;
-    MovieAdapter movieAdapter;
-
     private String apiKey;
+
+    private MovieAdapter movieAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,17 +32,15 @@ public class MainActivity extends AppCompatActivity implements GetMoviesTask.Lis
 
         GridView gridView = findViewById(R.id.movies_grid);
         gridView.setAdapter(movieAdapter);
-        gridView.setNumColumns(2);
+        gridView.setNumColumns(getResources().getInteger(R.integer.grid_columns_count));
 
         apiKey = getString(R.string.api_key);
         getMovies();
     }
 
-    void getMovies() {
-
+    private void getMovies() {
         GetMoviesTask.TaskCompleteNotify command = new GetMoviesTask.TaskCompleteNotify(this);
         new GetMoviesTask(mSortBy, command, apiKey, this).execute();
-
     }
 
     @Override
@@ -51,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements GetMoviesTask.Lis
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.sort_by_menu, menu);
 
         switch (mSortBy) {
@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements GetMoviesTask.Lis
                 menu.findItem(R.id.sort_by_top_rated).setChecked(true);
                 break;
         }
-
         return true;
     }
 
@@ -86,5 +85,10 @@ public class MainActivity extends AppCompatActivity implements GetMoviesTask.Lis
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
+    public void openMovie(Movie movie, int position) {
+        Intent intent = new Intent(this, MovieDetailActivity.class);
+        intent.putExtra(MovieDetailActivity.EXTRA_MOVIE, movie);
+        startActivity(intent);
+    }
 }
