@@ -2,6 +2,7 @@ package com.seventhstar.popularmovies;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.seventhstar.popularmovies.model.Movie;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,9 +20,27 @@ import java.util.List;
  */
 
 class MovieAdapter extends ArrayAdapter<Movie> {
+    List<Movie> moviesList;
 
     public MovieAdapter(@NonNull Context context, List<Movie> moviesList) {
         super(context, 0, moviesList);
+        this.moviesList = moviesList;
+    }
+
+    public MovieAdapter(MainActivity mainActivity) {
+        super(mainActivity, 0);
+        this.moviesList = new ArrayList<>();
+    }
+
+    @Override
+    public int getCount() {
+        return moviesList.size();
+    }
+
+    @Nullable
+    @Override
+    public Movie getItem(int position) {
+        return moviesList.get(position);
     }
 
     @Override
@@ -48,4 +68,8 @@ class MovieAdapter extends ArrayAdapter<Movie> {
         return convertView;
     }
 
+    public void refresh(List<Movie> moviesList) {
+        this.moviesList = moviesList;
+        this.notifyDataSetChanged();
+    }
 }

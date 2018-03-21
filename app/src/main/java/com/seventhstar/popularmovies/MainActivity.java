@@ -6,40 +6,46 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.GridView;
 
-import com.seventhstar.popularmovies.model.Movie;
+import com.seventhstar.popularmovies.service.Command;
+import com.seventhstar.popularmovies.service.GetMoviesTask;
 
-import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements GetMoviesTask.Listener{
 
     public final static String POPULAR = "popular";
     public final static String TOP_RATED = "top_rated";
 
     private String mSortBy = POPULAR;
+    MovieAdapter movieAdapter;
 
-    Movie[] moviesList = {
-            new Movie(1, "Cupcake", "1.5"),
-            new Movie(2, "Donut", "1.6"),
-            new Movie(3, "Eclair", "2.0-2.1"),
-            new Movie(4, "Froyo", "2.2-2.2.3"),
-            new Movie(5, "GingerBread", "2.3-2.3.7"),
-            new Movie(6, "Honeycomb", "3.0-3.2.6"),
-            new Movie(7, "Ice Cream Sandwich", "4.0-4.0.4"),
-            new Movie(8, "Jelly Bean", "4.1-4.3.1"),
-            new Movie(9, "KitKat", "4.4-4.4.4"),
-            new Movie(10, "Lollipop", "5.0-5.1.1")
-    };
+    private String apiKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MovieAdapter movieAdapter = new MovieAdapter(this, Arrays.asList(moviesList));
+        movieAdapter = new MovieAdapter(this);
 
         GridView gridView = findViewById(R.id.movies_grid);
         gridView.setAdapter(movieAdapter);
         gridView.setNumColumns(2);
+
+        apiKey = getString(R.string.api_key);
+    }
+
+    void getMovies() {
+
+        GetMoviesTask.TaskCompleteNotify command = new GetMoviesTask.TaskCompleteNotify(this);
+        new GetMoviesTask(mSortBy, command, apiKey, this).execute();
+
+    }
+
+    @Override
+    public void onLoadFinished(Command command) {
+        if (command instanceof GetMoviesTask.TaskCompleteNotify) {
+            movieAdapter.refresh(((GetMoviesTask.TaskCompleteNotify) command).getMovies());
+        }
     }
 
     @Override
@@ -65,11 +71,14 @@ public class MainActivity extends AppCompatActivity {
             case R.id.sort_by_top_rated:
                 mSortBy = TOP_RATED;
                 item.setChecked(true);
+                getMovies();
                 break;
             case R.id.sort_by_popular:
                 mSortBy = POPULAR;
                 item.setChecked(true);
+                getMovies();
                 break;
+
             default:
                 break;
         }
