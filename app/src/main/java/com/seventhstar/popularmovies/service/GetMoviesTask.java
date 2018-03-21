@@ -1,5 +1,6 @@
 package com.seventhstar.popularmovies.service;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
+@SuppressLint("StaticFieldLeak")
 public class GetMoviesTask extends AsyncTask<Void, Void, List<Movie>> {
     private final static String BASE_URL = "http://api.themoviedb.org/";
     private final static String API_VERSION = "3";

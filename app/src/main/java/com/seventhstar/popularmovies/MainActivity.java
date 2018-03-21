@@ -5,11 +5,16 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 
 import com.seventhstar.popularmovies.model.Movie;
 import com.seventhstar.popularmovies.service.Command;
 import com.seventhstar.popularmovies.service.GetMoviesTask;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -17,28 +22,45 @@ public class MainActivity extends AppCompatActivity implements
 
     private final static String POPULAR = "popular";
     private final static String TOP_RATED = "top_rated";
+    private static final String EXTRA_SORT_BY = "EXTRA_SORT_BY";
 
     private String mSortBy = POPULAR;
     private String apiKey;
-
     private MovieAdapter movieAdapter;
+
+    @BindView(R.id.movies_grid)
+    GridView gridView;
+
+    @BindView(R.id.pb_loading_indicator)
+    ProgressBar mLoadingIndicator;
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(EXTRA_SORT_BY, mSortBy);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        movieAdapter = new MovieAdapter(this);
+        ButterKnife.bind(this);
 
-        GridView gridView = findViewById(R.id.movies_grid);
+        movieAdapter = new MovieAdapter(this);
         gridView.setAdapter(movieAdapter);
         gridView.setNumColumns(getResources().getInteger(R.integer.grid_columns_count));
 
         apiKey = getString(R.string.api_key);
+
+        if (savedInstanceState != null) {
+            mSortBy = savedInstanceState.getString(EXTRA_SORT_BY);
+        }
         getMovies();
     }
 
     private void getMovies() {
+        mLoadingIndicator.setVisibility(View.VISIBLE);
         GetMoviesTask.TaskCompleteNotify command = new GetMoviesTask.TaskCompleteNotify(this);
         new GetMoviesTask(mSortBy, command, apiKey, this).execute();
     }
@@ -48,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements
         if (command instanceof GetMoviesTask.TaskCompleteNotify) {
             movieAdapter.refresh(((GetMoviesTask.TaskCompleteNotify) command).getMovies());
         }
+        mLoadingIndicator.setVisibility(View.INVISIBLE);
     }
 
     @Override
