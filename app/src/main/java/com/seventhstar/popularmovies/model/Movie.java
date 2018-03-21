@@ -29,7 +29,7 @@ public class Movie implements Parcelable {
         this.mTitle = mTitle;
     }
 
-    public String getmPoster() {
+    public String getImageURL() {
         return mPoster;
     }
 

@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements GetMoviesTask.Lis
         gridView.setNumColumns(2);
 
         apiKey = getString(R.string.api_key);
+        getMovies();
     }
 
     void getMovies() {
