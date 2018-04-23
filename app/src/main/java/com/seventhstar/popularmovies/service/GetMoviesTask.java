@@ -29,23 +29,17 @@ public class GetMoviesTask extends AsyncTask<Void, Void, List<Movie>> {
     private final String mSortBy;
     private final String mApiKey;
     private final Context context;
-
     private final TaskCompleteNotify mCommand;
 
     public GetMoviesTask(String sortBy, TaskCompleteNotify command, String apiKey, MainActivity mainActivity) {
         mSortBy = sortBy;
-        mCommand = command;
         mApiKey = apiKey;
         context = mainActivity;
+        mCommand = command;
     }
 
     public interface Listener {
         void onLoadFinished(Command command);
-    }
-
-    interface MovieDbApi {
-        @GET("{api_version}/movie/{sort_by}")
-        Call<Movies> discoverMovies(@Path("sort_by") String sortBy, @Path("api_version") String apiVersion, @Query("api_key") String apiKey);
     }
 
     public static class TaskCompleteNotify implements Command {

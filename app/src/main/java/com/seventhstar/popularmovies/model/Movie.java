@@ -3,7 +3,11 @@ package com.seventhstar.popularmovies.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Movie implements Parcelable {
     private static final String previewPrefix = "http://image.tmdb.org/t/p/w780";
@@ -28,8 +32,11 @@ public class Movie implements Parcelable {
     @SerializedName("overview")
     private final String mOverview;
 
-//    @SerializedName("genres")
-//    private final List<Genre> genres = new ArrayList<>();
+    @SerializedName("genres")
+    @Expose
+    private List<Genre> genres = null;
+//    private List<Genre> genres;
+
 
     public String getTitle() {
         return mTitle;
@@ -56,6 +63,7 @@ public class Movie implements Parcelable {
         mOverview = in.readString();
         mPopularity = in.readString();
 //        genres = in.readArrayList(Genre.class.getClassLoader());
+        in.readList(this.genres, (Genre.class.getClassLoader()));
     }
 
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
@@ -84,7 +92,7 @@ public class Movie implements Parcelable {
         dest.writeString(mReleaseDate);
         dest.writeString(mOverview);
         dest.writeString(mPopularity);
-//        dest.writeTypedList(genres);
+        dest.writeList(genres);
     }
 
     public String getRating() {
@@ -92,7 +100,7 @@ public class Movie implements Parcelable {
     }
 
     public String getReleaseDate() {
-       return mReleaseDate;
+        return mReleaseDate;
     }
 
     public String getOverview() {
@@ -109,8 +117,8 @@ public class Movie implements Parcelable {
         return (point > 0) ? mPopularity.substring(0, point) : mPopularity;
     }
 
-//    public List<Genre> getGenres() {
-//        return genres;
-//    }
+    public List<Genre> getGenres() {
+        return genres;
+    }
 
 }

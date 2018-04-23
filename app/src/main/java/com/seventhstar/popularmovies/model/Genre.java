@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
 public class Genre implements Parcelable {
 
     @SerializedName("id")
-    private long id;
+    private Integer id;
     @SerializedName("name")
     private String name;
 
@@ -24,18 +24,19 @@ public class Genre implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(((int) id));
+        dest.writeInt(id);
         dest.writeString(name);
     }
 
     private Genre(Parcel in) {
+        super();
         this.id = in.readInt();
         this.name = in.readString();
     }
 
     public static final Creator<Genre> CREATOR = new Creator<Genre>() {
-        public Genre createFromParcel(Parcel source) {
-            return new Genre(source);
+        public Genre createFromParcel(Parcel in) {
+            return new Genre(in);
         }
 
         public Genre[] newArray(int size) {
