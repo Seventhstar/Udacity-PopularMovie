@@ -3,7 +3,15 @@
     <dimen name="movie_item_height">300dp</dimen>
     <dimen name="movie_item_width">150dp</dimen>
     <dimen name="detail_item_margin">16dp</dimen>
+    <dimen name="detail_item_small_margin">8dp</dimen>
     <dimen name="detail_headline_text_size_material">24sp</dimen>
     <dimen name="detail_text_size_material">18sp</dimen>
     <dimen name="detail_text_size">14sp</dimen>
+    <dimen name="detail_trailer_width">180dp</dimen>
+    <dimen name="detail_trailer_height">120dp</dimen>
+    <dimen name="app_bar_height">200dp</dimen>
+    <dimen name="small_poster_width">120dp</dimen>
+    <dimen name="small_poster_height">180dp</dimen>
+    <dimen name="big_poster_height">232dp</dimen>
+    <dimen name="round_loading_size">42dp</dimen>
 </resources>

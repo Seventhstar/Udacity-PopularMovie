@@ -1,4 +1,4 @@
-package com.seventhstar.popularmovies;
+package com.seventhstar.popularmovies.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,13 +10,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.seventhstar.popularmovies.MainActivity;
+import com.seventhstar.popularmovies.R;
 import com.seventhstar.popularmovies.model.Movie;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class MovieAdapter extends ArrayAdapter<Movie> {
+public class MovieAdapter extends ArrayAdapter<Movie> {
     private List<Movie> moviesList;
     private final Context context;
     private final Callbacks callbacks;

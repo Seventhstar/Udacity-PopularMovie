@@ -1,51 +1,20 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".MovieDetailActivity"
-    tools:ignore="MergeRootFrame">
+<?xml version="1.0" encoding="utf-8"?>
+<!--<android.support.v4.widget.NestedScrollView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:scrollbars="none"-->
+    <!--app:behavior_overlapTop="30dp"-->
+    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
 
-<android.support.design.widget.AppBarLayout
-    android:id="@+id/app_bar"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/app_bar_height"
-    android:fitsSystemWindows="true"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+    <!--&gt;-->
 
-    <android.support.design.widget.CollapsingToolbarLayout
-        android:id="@+id/toolbar_layout"
+    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        app:contentScrim="@color/colorPrimaryDark"
-        app:layout_scrollFlags="scroll|exitUntilCollapsed"
-        app:toolbarId="@+id/toolbar">
-
-        <ImageView
-            android:id="@+id/movie_poster"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/poster"
-            android:cropToPadding="true"
-            android:scaleType="fitCenter"
-            android:src="@drawable/donut" />
-
-
-    </android.support.design.widget.CollapsingToolbarLayout>
-
-</android.support.design.widget.AppBarLayout>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/scroll"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:scrollbarStyle="insideOverlay">
-
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    >
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -56,73 +25,68 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:background="@color/colorPrimaryDark"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/movie_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:padding="@dimen/detail_item_margin"
-                android:text="@string/text_movie_title"
-                android:textColor="@color/title_text_color"
-                android:textSize="@dimen/detail_headline_text_size_material" />
-
-            <View
-                android:id="@+id/view"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                tools:ignore="NestedWeights" />
-
-            <TextView
-                android:id="@+id/movie_year"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/detail_item_margin"
-                android:text="@string/text_year"
-                android:textAlignment="viewEnd"
-                android:textColor="@android:color/background_light"
-                android:textSize="@dimen/detail_headline_text_size_material" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/detail_item_margin"
-            android:layout_marginRight="@dimen/detail_item_margin"
             android:layout_marginTop="@dimen/detail_item_margin"
-            android:layout_weight="1"
-            android:background="@android:color/background_light"
             android:orientation="horizontal"
-            android:padding="@dimen/detail_item_margin">
+            android:paddingLeft="@dimen/detail_item_margin"
+            android:paddingRight="@dimen/detail_item_margin">
 
-            <TextView
-                android:id="@+id/movie_popularity"
-                android:layout_width="wrap_content"
+            <ImageView
+                android:id="@+id/movie_poster_small"
+                android:layout_width="@dimen/small_poster_width"
+                android:layout_height="@dimen/small_poster_height"
+                android:layout_marginBottom="@dimen/detail_item_margin"
+                android:layout_marginEnd="@dimen/detail_item_margin"
+                android:contentDescription="@string/poster"
+                android:scaleType="fitXY" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/text_popularity"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/detail_text_size_material"
-                tools:ignore="InconsistentLayout" />
+                android:orientation="vertical">
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                tools:ignore="NestedWeights" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@android:color/background_light"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/detail_item_margin">
 
-            <TextView
-                android:id="@+id/movie_rating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_rating"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/detail_text_size_material" />
+                    <TextView
+                        android:id="@+id/movie_popularity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_popularity"
+                        android:textColor="@android:color/black"
+                        android:textSize="@dimen/detail_text_size_material" />
+                </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/detail_item_small_margin"
+                    android:layout_marginRight="@dimen/detail_item_small_margin"
+                    android:layout_weight="1"
+                    android:background="@android:color/background_light"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/detail_item_margin">
+
+                    <TextView
+                        android:id="@+id/movie_rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_rating"
+                        android:textColor="@android:color/black"
+                        android:textSize="@dimen/detail_text_size_material" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/button_make_favorite"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/make_favorite" />
+
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -192,7 +156,7 @@
         <TextView
             android:id="@+id/release_date"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginLeft="@dimen/detail_item_margin"
             android:layout_marginRight="@dimen/detail_item_margin"
             android:layout_weight="2"
@@ -247,5 +211,6 @@
             tools:listitem="@layout/review_item" />
 
     </LinearLayout>
-</ScrollView>
-</android.support.design.widget.CoordinatorLayout>
+
+
+</android.support.v4.widget.NestedScrollView>

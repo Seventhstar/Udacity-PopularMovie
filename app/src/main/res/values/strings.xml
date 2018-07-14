@@ -20,4 +20,11 @@
     <string name="release_date_head">Release date: %1$s</string>
     <string name="detail_rating_head">Rating: %1$s</string>
     <string name="popularity_head">Popularity: %1$s</string>
+    <string name="reviews_header">Reviews:</string>
+    <string name="text_loading">loading…</string>
+    <string name="movie_poster_description">Movie poster</string>
+    <string name="make_favorite">Make favorite</string>
+    <string name="remove_favorite">Remove from favorite</string>
+    <string name="thumbnail">thumbnail</string>
+    <string name="youtube_icon">youtube_icon</string>
 </resources>

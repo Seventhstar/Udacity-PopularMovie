@@ -6,7 +6,6 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Movie implements Parcelable {
@@ -15,8 +14,10 @@ public class Movie implements Parcelable {
 
     @SerializedName("id")
     private final long mId;
+
     @SerializedName("original_title")
     private final String mTitle;
+
     @SerializedName("poster_path")
     private final String mPoster;
 
@@ -29,25 +30,22 @@ public class Movie implements Parcelable {
     @SerializedName("release_date")
     private final String mReleaseDate;
 
+    @SerializedName("backdrop_path")
+    private final String mBackdrop;
+
     @SerializedName("overview")
     private final String mOverview;
 
     @SerializedName("genres")
     @Expose
     private List<Genre> genres = null;
-//    private List<Genre> genres;
-
 
     public String getTitle() {
         return mTitle;
     }
 
-//    public String getImageURL() {
-//        return mPoster;
-//    }
-
-    public String getOriginalURL() {
-        return originalPrefix + mPoster;
+    public String getBackdropURL() {
+        return originalPrefix + mBackdrop;
     }
 
     public String getPreviewURL() {
@@ -62,7 +60,7 @@ public class Movie implements Parcelable {
         mReleaseDate = in.readString();
         mOverview = in.readString();
         mPopularity = in.readString();
-//        genres = in.readArrayList(Genre.class.getClassLoader());
+        mBackdrop = in.readString();
         in.readList(this.genres, (Genre.class.getClassLoader()));
     }
 
@@ -92,6 +90,7 @@ public class Movie implements Parcelable {
         dest.writeString(mReleaseDate);
         dest.writeString(mOverview);
         dest.writeString(mPopularity);
+        dest.writeString(mBackdrop);
         dest.writeList(genres);
     }
 
@@ -107,7 +106,6 @@ public class Movie implements Parcelable {
         return mOverview;
     }
 
-
     public String getYear() {
         return mReleaseDate.substring(0, 4);
     }
@@ -117,8 +115,24 @@ public class Movie implements Parcelable {
         return (point > 0) ? mPopularity.substring(0, point) : mPopularity;
     }
 
+    public String getGenresString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Genre g : genres) {
+            stringBuilder.append(g.getName()).append(", ");
+        }
+        stringBuilder.setLength(stringBuilder.length() - 2);
+        return stringBuilder.toString();
+    }
+
     public List<Genre> getGenres() {
         return genres;
     }
 
+    public void setGenres(List<Genre> genres) {
+        this.genres = genres;
+    }
+
+    public long getId() {
+        return mId;
+    }
 }

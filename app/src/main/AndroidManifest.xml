@@ -22,6 +22,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".MovieDetailActivity" />
+        <provider
+            android:name=".database.MovieContentProvider"
+            android:authorities="com.seventhstar.udacity.popular_movies"
+            android:exported="false" />
     </application>
 
 </manifest>

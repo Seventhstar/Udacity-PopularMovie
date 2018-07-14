@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.GridView;
 import android.widget.ProgressBar;
 
+import com.seventhstar.popularmovies.adapters.MovieAdapter;
 import com.seventhstar.popularmovies.model.Movie;
 import com.seventhstar.popularmovies.service.Command;
 import com.seventhstar.popularmovies.service.GetMoviesTask;
