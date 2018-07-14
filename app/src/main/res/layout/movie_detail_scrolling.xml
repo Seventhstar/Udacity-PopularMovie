@@ -27,15 +27,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/detail_item_margin"
             android:orientation="horizontal"
-            android:paddingLeft="@dimen/detail_item_margin"
-            android:paddingRight="@dimen/detail_item_margin">
+            >
 
             <ImageView
                 android:id="@+id/movie_poster_small"
                 android:layout_width="@dimen/small_poster_width"
                 android:layout_height="@dimen/small_poster_height"
                 android:layout_marginBottom="@dimen/detail_item_margin"
-                android:layout_marginEnd="@dimen/detail_item_margin"
                 android:contentDescription="@string/poster"
                 android:scaleType="fitXY" />
 
@@ -64,8 +62,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/detail_item_small_margin"
-                    android:layout_marginRight="@dimen/detail_item_small_margin"
+                    android:layout_marginBottom="@dimen/detail_item_small_margin"
+                    android:layout_marginTop="@dimen/detail_item_small_margin"
                     android:layout_weight="1"
                     android:background="@android:color/background_light"
                     android:orientation="horizontal"
