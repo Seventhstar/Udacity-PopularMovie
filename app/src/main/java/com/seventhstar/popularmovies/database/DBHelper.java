@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 class DBHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 7;
     private static final String DATABASE_NAME = "movies.db";
 
     public DBHelper(Context context) {
@@ -14,19 +14,22 @@ class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+        String[] columnNames = MovieEntry.MovieColumns.columnNames();
         final String SQL_CREATE_FAVORITE_MOVIES_TABLE = "CREATE TABLE " +
                 MovieEntry.TABLE_NAME + " (" +
                 MovieEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                MovieEntry.COLUMN_MOVIE_API_ID + " INTEGER NOT NULL UNIQUE, " +
-                MovieEntry.COLUMN_MOVIE_NAME + " TEXT NOT NULL, " +
-                MovieEntry.COLUMN_MOVIE_OVERVIEW + " TEXT, " +
-                MovieEntry.COLUMN_MOVIE_RATING + " DOUBLE, " +
-                MovieEntry.COLUMN_MOVIE_RELEASE_DATE + " TEXT, " +
-                MovieEntry.COLUMN_MOVIE_SMALL_POSTER + " TEXT NOT NULL, " +
-                MovieEntry.COLUMN_MOVIE_POSTER + " TEXT NOT NULL, " +
-                MovieEntry.COLUMN_MOVIE_GENRES + " TEXT NOT NULL, " +
+                columnNames[0] + " INTEGER NOT NULL UNIQUE, " +
+                columnNames[1] + " TEXT NOT NULL, " +
+                columnNames[2] + " TEXT, " +
+                columnNames[3] + " DOUBLE, " +
+                columnNames[4] + " DOUBLE, " +
+                columnNames[5] + " TEXT, " +
+                columnNames[6] + " TEXT NOT NULL, " +
+                columnNames[7] + " TEXT NOT NULL, " +
+                columnNames[8] + " TEXT, " +
                 " UNIQUE (" +
-                MovieEntry.COLUMN_MOVIE_API_ID +
+                columnNames[0] +
                 ") ON CONFLICT REPLACE);";
 
         db.execSQL(SQL_CREATE_FAVORITE_MOVIES_TABLE);

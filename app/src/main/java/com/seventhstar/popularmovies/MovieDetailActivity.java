@@ -217,14 +217,18 @@ public class MovieDetailActivity extends AppCompatActivity implements
             protected Void doInBackground(Void... params) {
                 if (!isFavorite()) {
                     ContentValues contentValues = new ContentValues();
-                    contentValues.put(MovieEntry.COLUMN_MOVIE_API_ID, movieID);
-                    contentValues.put(MovieEntry.COLUMN_MOVIE_NAME, movie.getTitle());
-                    contentValues.put(MovieEntry.COLUMN_MOVIE_OVERVIEW, movie.getOverview());
-                    contentValues.put(MovieEntry.COLUMN_MOVIE_RATING, movie.getRating());
-                    contentValues.put(MovieEntry.COLUMN_MOVIE_RELEASE_DATE, movie.getReleaseDate());
-                    contentValues.put(MovieEntry.COLUMN_MOVIE_SMALL_POSTER, movie.getPreviewURL());
-                    contentValues.put(MovieEntry.COLUMN_MOVIE_POSTER, movie.getBackdropURL());
-                    contentValues.put(MovieEntry.COLUMN_MOVIE_GENRES, movie.getGenresString());
+                    String[] columnNames = MovieEntry.MovieColumns.columnNames();
+                    for (int i =0; i<8; i++ ) {
+                        contentValues.put(columnNames[i], movie.fieldByColumnId(i));
+                    }
+//                    contentValues.put(MovieEntry.COLUMN_MOVIE_API_ID, movieID);
+//                    contentValues.put(MovieEntry.COLUMN_MOVIE_NAME, movie.getTitle());
+//                    contentValues.put(MovieEntry.COLUMN_MOVIE_OVERVIEW, movie.getOverview());
+//                    contentValues.put(MovieEntry.COLUMN_MOVIE_RATING, movie.getRating());
+//                    contentValues.put(MovieEntry.COLUMN_MOVIE_RELEASE_DATE, movie.getReleaseDate());
+//                    contentValues.put(MovieEntry.COLUMN_MOVIE_SMALL_POSTER, movie.getPreviewURL());
+//                    contentValues.put(MovieEntry.COLUMN_MOVIE_POSTER, movie.getBackdropURL());
+//                    contentValues.put(MovieEntry.COLUMN_MOVIE_GENRES, movie.getGenresString());
                     getContentResolver().insert(MovieEntry.CONTENT_URI, contentValues);
                 }
                 return null;

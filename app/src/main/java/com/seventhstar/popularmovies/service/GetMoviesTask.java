@@ -3,10 +3,8 @@ package com.seventhstar.popularmovies.service;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import com.seventhstar.popularmovies.MainActivity;
-import com.seventhstar.popularmovies.R;
 import com.seventhstar.popularmovies.model.Movie;
 import com.seventhstar.popularmovies.model.Movies;
 
@@ -25,13 +23,11 @@ public class GetMoviesTask extends AsyncTask<Void, Void, List<Movie>> {
     private final static String API_VERSION = "3";
     private final String mSortBy;
     private final String mApiKey;
-    private final Context context;
     private final TaskCompleteNotify mCommand;
 
     public GetMoviesTask(String sortBy, TaskCompleteNotify command, String apiKey, MainActivity mainActivity) {
         mSortBy = sortBy;
         mApiKey = apiKey;
-        context = mainActivity;
         mCommand = command;
     }
 
@@ -82,7 +78,7 @@ public class GetMoviesTask extends AsyncTask<Void, Void, List<Movie>> {
             return movies != null ? movies.getMovies() : null;
 
         } catch (IOException e) {
-            Toast.makeText(context, context.getResources().getString(R.string.api_movie_db_problem), Toast.LENGTH_SHORT).show();
+           // Toast.makeText(context, context.getResources().getString(R.string.api_movie_db_problem), Toast.LENGTH_SHORT).show();
         }
         return null;
     }

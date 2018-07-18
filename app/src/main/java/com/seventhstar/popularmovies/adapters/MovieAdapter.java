@@ -1,6 +1,7 @@
 package com.seventhstar.popularmovies.adapters;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -18,10 +19,38 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.seventhstar.popularmovies.database.MovieEntry.*;
+
 public class MovieAdapter extends ArrayAdapter<Movie> {
     private List<Movie> moviesList;
     private final Context context;
     private final Callbacks callbacks;
+
+    public List<Movie> getMovies() {
+        return moviesList;
+    }
+
+    public void fromCursor(Cursor cursor) {
+        moviesList.clear();
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                Movie movie = new Movie(
+                        cursor.getString(MovieColumns.API_ID.getValue()),
+                        cursor.getString(MovieColumns.TITLE.getValue()),
+                        cursor.getString(MovieColumns.OVERVIEW.getValue()),
+                        cursor.getString(MovieColumns.RELEASE_DATE.getValue()),
+                        cursor.getString(MovieColumns.RATING.getValue()),
+                        cursor.getString(MovieColumns.POPULARITY.getValue()),
+                        cursor.getString(MovieColumns.POSTER_PATH.getValue()),
+                        cursor.getString(MovieColumns.BACKDROP_PATH.getValue()),
+                        cursor.getString(MovieColumns.GENRES.getValue())
+                );
+
+                moviesList.add(movie);
+            } while (cursor.moveToNext());
+        }
+        this.notifyDataSetChanged();
+    }
 
     public interface Callbacks {
         void openMovie(Movie movie);

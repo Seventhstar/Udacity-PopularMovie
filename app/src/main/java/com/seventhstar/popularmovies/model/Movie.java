@@ -40,26 +40,47 @@ public class Movie implements Parcelable {
     @Expose
     private List<Genre> genres = null;
 
+    private String genresString;
+
+    public Movie(String id, String title, String overview, String releaseDate, String rating, String popularity, String posterPath, String backdropPath, String genresString) {
+
+        mId = Long.parseLong(id);
+        mTitle = title;
+        mOverview = overview;
+        mReleaseDate = releaseDate;
+        mRating = rating;
+        mPopularity = popularity;
+        mPoster = posterPath;
+        mBackdrop = backdropPath;
+        this.genresString = genresString;
+    }
+
     public String getTitle() {
         return mTitle;
     }
 
     public String getBackdropURL() {
+        if (mBackdrop.contains(originalPrefix)) {
+            return mBackdrop;
+        }
         return originalPrefix + mBackdrop;
     }
 
     public String getPreviewURL() {
+        if (mPoster.contains(previewPrefix)) {
+            return mPoster;
+        }
         return previewPrefix + mPoster;
     }
 
-    private Movie(Parcel in) {
+    public Movie(Parcel in) {
         mId = in.readLong();
         mTitle = in.readString();
-        mPoster = in.readString();
-        mRating = in.readString();
-        mReleaseDate = in.readString();
         mOverview = in.readString();
+        mReleaseDate = in.readString();
+        mRating = in.readString();
         mPopularity = in.readString();
+        mPoster = in.readString();
         mBackdrop = in.readString();
         in.readList(this.genres, (Genre.class.getClassLoader()));
     }
@@ -85,11 +106,11 @@ public class Movie implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(mId);
         dest.writeString(mTitle);
-        dest.writeString(mPoster);
-        dest.writeString(mRating);
-        dest.writeString(mReleaseDate);
         dest.writeString(mOverview);
+        dest.writeString(mReleaseDate);
+        dest.writeString(mRating);
         dest.writeString(mPopularity);
+        dest.writeString(mPoster);
         dest.writeString(mBackdrop);
         dest.writeList(genres);
     }
@@ -116,12 +137,16 @@ public class Movie implements Parcelable {
     }
 
     public String getGenresString() {
+
+        if (genresString != null && !genresString.isEmpty()) return genresString;
+
         StringBuilder stringBuilder = new StringBuilder();
         for (Genre g : genres) {
             stringBuilder.append(g.getName()).append(", ");
         }
         stringBuilder.setLength(stringBuilder.length() - 2);
-        return stringBuilder.toString();
+        genresString = stringBuilder.toString();
+        return genresString;
     }
 
     public List<Genre> getGenres() {
@@ -134,5 +159,27 @@ public class Movie implements Parcelable {
 
     public long getId() {
         return mId;
+    }
+
+    public String fieldByColumnId(int i) {
+        switch (i) {
+            case 1:
+                return getTitle();
+            case 2:
+                return getOverview();
+            case 3:
+                return getReleaseDate();
+            case 4:
+                return getRating();
+            case 5:
+                return getPopularity();
+            case 6:
+                return getPreviewURL();
+            case 7:
+                return getBackdropURL();
+            case 8:
+                return getGenresString();
+        }
+        return String.valueOf(mId);
     }
 }

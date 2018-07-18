@@ -2,7 +2,6 @@ package com.seventhstar.popularmovies.service;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import com.seventhstar.popularmovies.R;
 import com.seventhstar.popularmovies.model.Movie;
@@ -100,7 +99,7 @@ public class GetMovieDBDataTask<V> extends AsyncTask<Void, Void, V> {
             }
 
         } catch (IOException e) {
-            Toast.makeText(context, context.getResources().getString(R.string.api_movie_db_problem), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context, context.getResources().getString(R.string.api_movie_db_problem), Toast.LENGTH_SHORT).show();
         }
         return null;
     }
