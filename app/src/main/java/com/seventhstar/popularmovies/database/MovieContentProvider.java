@@ -12,9 +12,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 public class MovieContentProvider extends ContentProvider {
-    private static final UriMatcher uriMatcher = buildUriMatcher();
+    private static final UriMatcher uriMatcher;
+
+    static {
+        uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+        uriMatcher.addURI(DBContract.AUTHORITY, DBContract.PATH_MOVIES, DBContract.URI_MOVIES);
+        uriMatcher.addURI(DBContract.AUTHORITY, DBContract.PATH_MOVIES + "/#", DBContract.URI_MOVIES_ID);
+    }
+
     private static final int MOVIES = 122;
     private DBHelper dbHelper;
+
 
     @Override
     public boolean onCreate() {
@@ -32,7 +40,7 @@ public class MovieContentProvider extends ContentProvider {
         int match = uriMatcher.match(uri);
         Cursor cursor;
         switch (match) {
-            case MOVIES: {
+            case DBContract.URI_MOVIES:
                 cursor = db.query(MovieEntry.TABLE_NAME,
                         projection,
                         selection,
@@ -41,7 +49,17 @@ public class MovieContentProvider extends ContentProvider {
                         null,
                         sortOrder);
                 break;
-            }
+            case DBContract.URI_MOVIES_ID:
+                long _id = ContentUris.parseId(uri);
+                cursor = db.query(MovieEntry.TABLE_NAME,
+                        projection,
+                        MovieEntry.COLUMN_MOVIE_API_ID + " = ?",
+                        new String[]{String.valueOf(_id)},
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
             default: {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
             }
@@ -54,13 +72,16 @@ public class MovieContentProvider extends ContentProvider {
         return cursor;
     }
 
+
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
         final int match = uriMatcher.match(uri);
         switch (match) {
-            case MOVIES:
+            case DBContract.URI_MOVIES:
                 return MovieEntry.CONTENT_TYPE;
+            case DBContract.URI_MOVIES_ID:
+                return MovieEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -74,10 +95,10 @@ public class MovieContentProvider extends ContentProvider {
 
         Uri returnUri;
         switch (match) {
-            case MOVIES: {
+            case DBContract.URI_MOVIES: {
                 long id = database.insert(MovieEntry.TABLE_NAME, null, values);
                 if (id > 0) {
-                    returnUri = ContentUris.withAppendedId(MovieEntry.CONTENT_URI, id);
+                    returnUri = ContentUris.withAppendedId(DBContract.CONTENT_URI, id);
                 } else {
                     throw new android.database.SQLException("Error insert movie.db" + uri);
                 }
@@ -101,7 +122,7 @@ public class MovieContentProvider extends ContentProvider {
         int moviesDeleted;
 
         switch (match) {
-            case MOVIES: {
+            case DBContract.URI_MOVIES_ID: {
                 moviesDeleted = db.delete(MovieEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             }
@@ -138,11 +159,5 @@ public class MovieContentProvider extends ContentProvider {
             getContext().getContentResolver().notifyChange(uri, null);
         }
         return rowsUpdated;
-    }
-
-    private static UriMatcher buildUriMatcher() {
-        final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        uriMatcher.addURI(DBContract.AUTHORITY, DBContract.PATH, MOVIES);
-        return uriMatcher;
     }
 }

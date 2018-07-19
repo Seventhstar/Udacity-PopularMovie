@@ -1,6 +1,7 @@
 package com.seventhstar.popularmovies;
 
 import android.annotation.SuppressLint;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.seventhstar.popularmovies.adapters.TrailersListAdapter;
+import com.seventhstar.popularmovies.database.DBContract;
 import com.seventhstar.popularmovies.database.MovieEntry;
 import com.seventhstar.popularmovies.model.Movie;
 import com.seventhstar.popularmovies.model.Review;
@@ -36,6 +38,8 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.seventhstar.popularmovies.database.MovieEntry.buildMovieUri;
 
 
 @SuppressWarnings("WeakerAccess")
@@ -94,6 +98,8 @@ public class MovieDetailActivity extends AppCompatActivity implements
     long movieID;
     GetMovieDBDataTask.TaskCompleteNotify mTaskCompleteNotify;
 
+    ContentResolver resolver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +111,8 @@ public class MovieDetailActivity extends AppCompatActivity implements
         }
 
         ButterKnife.bind(this);
+
+        resolver = getContentResolver();
 
         movie = getIntent().getParcelableExtra(EXTRA_MOVIE);
         movieID = movie.getId();
@@ -194,8 +202,8 @@ public class MovieDetailActivity extends AppCompatActivity implements
 
             @Override
             protected Void doInBackground(Void... params) {
-                getContentResolver().delete(
-                        MovieEntry.CONTENT_URI,
+                resolver.delete(
+                        DBContract.CONTENT_URI,
                         MovieEntry.COLUMN_MOVIE_API_ID + " = " + movieID,
                         null);
                 return null;
@@ -218,18 +226,10 @@ public class MovieDetailActivity extends AppCompatActivity implements
                 if (!isFavorite()) {
                     ContentValues contentValues = new ContentValues();
                     String[] columnNames = MovieEntry.MovieColumns.columnNames();
-                    for (int i =0; i<8; i++ ) {
+                    for (int i = 0; i < 8; i++) {
                         contentValues.put(columnNames[i], movie.fieldByColumnId(i));
                     }
-//                    contentValues.put(MovieEntry.COLUMN_MOVIE_API_ID, movieID);
-//                    contentValues.put(MovieEntry.COLUMN_MOVIE_NAME, movie.getTitle());
-//                    contentValues.put(MovieEntry.COLUMN_MOVIE_OVERVIEW, movie.getOverview());
-//                    contentValues.put(MovieEntry.COLUMN_MOVIE_RATING, movie.getRating());
-//                    contentValues.put(MovieEntry.COLUMN_MOVIE_RELEASE_DATE, movie.getReleaseDate());
-//                    contentValues.put(MovieEntry.COLUMN_MOVIE_SMALL_POSTER, movie.getPreviewURL());
-//                    contentValues.put(MovieEntry.COLUMN_MOVIE_POSTER, movie.getBackdropURL());
-//                    contentValues.put(MovieEntry.COLUMN_MOVIE_GENRES, movie.getGenresString());
-                    getContentResolver().insert(MovieEntry.CONTENT_URI, contentValues);
+                    resolver.insert(DBContract.CONTENT_URI, contentValues);
                 }
                 return null;
             }
@@ -258,13 +258,12 @@ public class MovieDetailActivity extends AppCompatActivity implements
     }
 
     private boolean isFavorite() {
-        Cursor movieCursor = getContentResolver().
-                query(
-                        MovieEntry.CONTENT_URI,
-                        new String[]{MovieEntry.COLUMN_MOVIE_API_ID},
-                        MovieEntry.COLUMN_MOVIE_API_ID + " = " + movieID,
-                        null,
-                        null);
+        Cursor movieCursor = resolver.query(
+                DBContract.buildMovieUri(movieID),
+                new String[]{MovieEntry.COLUMN_MOVIE_API_ID},
+                null,
+                null,
+                null);
 
         if (movieCursor != null && movieCursor.moveToFirst()) {
             movieCursor.close();

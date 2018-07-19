@@ -18,21 +18,32 @@ android {
     }
 }
 
+ext {
+    supportLibVersion = '27.1.1'
+    constraintLayoutLibVersion = '1.1.2'
+    retrofitLibVersion = '2.4.0'
+    butterknifeVersion = '8.8.1'
+    junitVersion = '4.12'
+    picassoLibVersion = '2.5.2'
+    testRunnerLibVersion = '1.0.2'
+    espressoCoreLibVersion = '3.0.2'
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    implementation 'com.android.support:support-v4:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    api 'com.squareup.retrofit2:retrofit:2.4.0'
-    api 'com.squareup.retrofit2:converter-gson:2.4.0'
-    api 'com.android.support:recyclerview-v7:27.1.1'
+    implementation "com.android.support:appcompat-v7:${supportLibVersion}"
+    implementation "com.android.support:support-v4:${supportLibVersion}"
+    implementation "com.android.support:design:${supportLibVersion}"
+    implementation "com.android.support.constraint:constraint-layout:${constraintLayoutLibVersion}"
+    testImplementation "junit:junit:${junitVersion}"
+    androidTestImplementation "com.android.support.test:runner:${testRunnerLibVersion}"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:${espressoCoreLibVersion}"
+    api "com.squareup.retrofit2:retrofit:${retrofitLibVersion}"
+    api "com.squareup.retrofit2:converter-gson:${retrofitLibVersion}"
+    api "com.android.support:recyclerview-v7:${supportLibVersion}"
     //noinspection GradleDependency
-    api 'com.squareup.picasso:picasso:2.5.2'
-    api 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    api "com.squareup.picasso:picasso:${picassoLibVersion}"
+    api "com.jakewharton:butterknife:${butterknifeVersion}"
+    annotationProcessor "com.jakewharton:butterknife-compiler:${butterknifeVersion}"
 
 }

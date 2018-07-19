@@ -3,9 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".MovieDetailActivity"
-    tools:ignore="MergeRootFrame">
+    tools:context="com.seventhstar.popularmovies.MovieDetailActivity"
+    tools:ignore="RtlHardcoded">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -40,42 +39,42 @@
                 android:orientation="vertical"
                 app:layout_collapseMode="pin" />
 
-    </android.support.design.widget.CollapsingToolbarLayout>
-
-</android.support.design.widget.AppBarLayout>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/scroll"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:scrollbarStyle="insideOverlay">
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
 
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <include layout="@layout/movie_detail_scrolling" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/main.toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/darker_gray"
-        android:orientation="vertical">
+        android:background="@color/colorPrimaryDark"
+        android:padding="0dp"
+
+        app:layout_anchor="@id/main.framelayout.title"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark"
+        app:title="">
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="62dp"
             android:layout_weight="3"
             android:background="@color/colorPrimaryDark">
 
             <TextView
                 android:id="@+id/movie_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="62dp"
                 android:ellipsize="end"
+                app:layout_constraintLeft_toLeftOf="parent"
                 android:padding="@dimen/detail_item_margin"
                 android:text="@string/text_movie_title"
                 android:textColor="@color/title_text_color"
                 android:textSize="@dimen/detail_headline_text_size_material"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                tools:layout_editor_absoluteX="0dp" />
 
             <TextView
                 android:id="@+id/movie_year"
@@ -90,197 +89,6 @@
                 app:layout_constraintEnd_toEndOf="parent" />
         </android.support.constraint.ConstraintLayout>
 
+    </android.support.v7.widget.Toolbar>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/detail_item_margin"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/movie_poster_small"
-                android:layout_width="@dimen/small_poster_width"
-                android:layout_height="@dimen/small_poster_height"
-                android:layout_marginLeft="@dimen/detail_item_margin"
-                android:layout_marginBottom="@dimen/detail_item_margin"
-                android:contentDescription="@string/poster"
-                android:scaleType="fitXY" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="@dimen/detail_item_margin"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@android:color/background_light"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/detail_item_margin">
-
-                    <TextView
-                        android:id="@+id/movie_popularity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/text_popularity"
-                        android:textColor="@android:color/black"
-                        android:textSize="@dimen/detail_text_size_material" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="@dimen/detail_item_small_margin"
-                    android:layout_marginTop="@dimen/detail_item_small_margin"
-                    android:layout_weight="1"
-                    android:background="@android:color/background_light"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/detail_item_margin">
-
-                    <TextView
-                        android:id="@+id/movie_rating"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/text_rating"
-                        android:textColor="@android:color/black"
-                        android:textSize="@dimen/detail_text_size_material" />
-                </LinearLayout>
-
-                <Button
-                    android:id="@+id/button_make_favorite"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/make_favorite" />
-
-            </LinearLayout>
-        </LinearLayout>
-
-
-
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/detail_item_margin"
-            android:layout_marginRight="@dimen/detail_item_margin"
-            android:layout_marginTop="@dimen/detail_item_margin"
-            android:background="@android:color/background_light"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/movie_description_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/detail_item_margin"
-                android:layout_marginRight="@dimen/detail_item_margin"
-                android:layout_marginTop="@dimen/detail_item_margin"
-                android:layout_weight="2"
-                android:background="@android:color/background_light"
-                android:text="@string/text_description"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/detail_text_size"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/movie_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/detail_item_margin"
-                android:layout_weight="2"
-                android:background="@android:color/background_light"
-                android:text="@string/text_movie_description"
-                android:textSize="@dimen/detail_text_size" />
-        </LinearLayout>
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/detail_item_margin"
-            android:background="@android:color/background_light"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/genres_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/detail_item_margin"
-                android:layout_marginRight="@dimen/detail_item_margin"
-                android:layout_marginTop="@dimen/detail_item_margin"
-                android:layout_weight="2"
-                android:text="@string/text_genres_title"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/detail_text_size_material"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/genres"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/detail_item_margin"
-                android:layout_weight="2"
-                android:text="@string/text_genres"
-                android:textSize="@dimen/detail_text_size" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/release_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/detail_item_margin"
-            android:layout_marginRight="@dimen/detail_item_margin"
-            android:layout_weight="2"
-            android:background="@android:color/background_light"
-            android:padding="@dimen/detail_item_margin"
-            android:text="@string/text_release_date"
-            android:textSize="@dimen/detail_text_size_material" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/trailers_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/detail_item_margin"
-            tools:listitem="@layout/trailer_item" />
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/review_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/detail_item_margin"
-            android:layout_marginRight="@dimen/detail_item_margin"
-            android:background="@android:color/background_light"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/reviews_head"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/detail_item_margin"
-                android:layout_weight="2"
-                android:background="@android:color/background_light"
-                android:text="@string/reviews_header"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/detail_text_size_material" />
-
-            <TextView
-                android:id="@+id/reviews_loading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/detail_item_margin"
-                android:text="@string/text_loading"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/detail_text_size_material" />
-        </LinearLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/reviews_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/detail_item_margin"
-            android:background="@android:color/background_light"
-            tools:listitem="@layout/review_item" />
-
-    </LinearLayout>
-</ScrollView>
 </android.support.design.widget.CoordinatorLayout>
