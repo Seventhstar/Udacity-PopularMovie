@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,6 +51,14 @@ public class MainActivity extends AppCompatActivity implements
     @BindView(R.id.pb_loading_indicator)
     ProgressBar mLoadingIndicator;
 
+    @BindView(R.id.bnv_main_activity)
+    BottomNavigationView bottomNavigationView;
+    private BottomNavigationView.OnNavigationItemSelectedListener navItemSelectedListener;
+    private boolean isBeforeSelectedNavItem;
+    private int selectedNavItemId;
+
+    private LoaderManager.LoaderCallbacks callbacks;
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -80,15 +90,59 @@ public class MainActivity extends AppCompatActivity implements
                 List<Movie> movies = savedInstanceState.getParcelableArrayList(EXTRA_MOVIES);
                 movieAdapter.refresh(movies);
                 gridView.setSelection(savedInstanceState.getInt(EXTRA_GRID_POSITION));
-
-                // For listening content updates for tow pane mode
-//                if (mSortBy.equals(FetchMoviesTask.FAVORITES)) {
-//                    getSupportLoaderManager().initLoader(FAVORITE_MOVIES_LOADER, null, this);
-//                }
             }
         } else {
             getMovies();
         }
+
+        navItemSelectedListener = getNavigationItemSelectedListener();
+        bottomNavigationView.setOnNavigationItemSelectedListener(navItemSelectedListener);
+        bottomNavigationView.setOnNavigationItemReselectedListener(getNavigationItemReselectedListener());
+        bottomNavigationView.setSelectedItemId(selectedNavItemId);
+
+        callbacks = this;
+    }
+
+    @NonNull
+    private BottomNavigationView.OnNavigationItemReselectedListener getNavigationItemReselectedListener() {
+        return new BottomNavigationView.OnNavigationItemReselectedListener() {
+            @Override
+            public void onNavigationItemReselected(@NonNull MenuItem item) {
+                if (!isBeforeSelectedNavItem) {
+                    navItemSelectedListener.onNavigationItemSelected(item);
+                    isBeforeSelectedNavItem = !isBeforeSelectedNavItem;
+                }
+            }
+        };
+    }
+
+    @NonNull
+    private BottomNavigationView.OnNavigationItemSelectedListener getNavigationItemSelectedListener() {
+        return new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                selectedNavItemId = item.getItemId();
+
+                switch (item.getItemId()) {
+                    case R.id.sort_by_top_rated:
+                        mSortBy = TOP_RATED;
+                        break;
+                    case R.id.sort_by_popular:
+                        mSortBy = POPULAR;
+                        break;
+                    case R.id.sort_by_favorites:
+                        mSortBy = FAVORITES;
+                }
+
+                if (selectedNavItemId == R.id.sort_by_favorites) {
+                    getSupportLoaderManager().initLoader(FAVORITES_LOADER, null, callbacks);
+                } else {
+                    getMovies();
+                }
+
+                return true;
+            }
+        };
     }
 
     private void getMovies() {
@@ -113,53 +167,10 @@ public class MainActivity extends AppCompatActivity implements
     public void onLoadFinished(@NonNull Loader<Cursor> cursorLoader, Cursor cursor) {
         if (mSortBy.equals(FAVORITES)) {
             movieAdapter.fromCursor(cursor);
-            //updateEmptyState();
         }
         mLoadingIndicator.setVisibility(View.INVISIBLE);
-
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.sort_by_menu, menu);
-
-        switch (mSortBy) {
-            case POPULAR:
-                menu.findItem(R.id.sort_by_popular).setChecked(true);
-                break;
-            case TOP_RATED:
-                menu.findItem(R.id.sort_by_top_rated).setChecked(true);
-                break;
-            case FAVORITES:
-                menu.findItem(R.id.sort_by_favorites).setChecked(true);
-                break;
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.sort_by_top_rated:
-                mSortBy = TOP_RATED;
-                item.setChecked(true);
-                getMovies();
-                break;
-            case R.id.sort_by_popular:
-                mSortBy = POPULAR;
-                item.setChecked(true);
-                getMovies();
-                break;
-            case R.id.sort_by_favorites:
-                mSortBy = FAVORITES;
-                item.setChecked(true);
-                getMovies();
-            default:
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void openMovie(Movie movie) {
