@@ -18,7 +18,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 @SuppressLint("StaticFieldLeak")
-public class GetMoviesTask extends AsyncTask<Void, Void, List<Movie>> {
+public class GetMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>> {
     private final static String BASE_URL = "http://api.themoviedb.org/";
     private final static String API_VERSION = "3";
     private final String mSortBy;
@@ -37,7 +37,7 @@ public class GetMoviesTask extends AsyncTask<Void, Void, List<Movie>> {
 
     public static class TaskCompleteNotify implements Command {
         private final GetMoviesTask.Listener mListener;
-        private List<Movie> moviesList;
+        private ArrayList<Movie> moviesList;
 
         public TaskCompleteNotify(GetMoviesTask.Listener listener) {
             mListener = listener;
@@ -48,23 +48,19 @@ public class GetMoviesTask extends AsyncTask<Void, Void, List<Movie>> {
             mListener.onLoadFinished(this);
         }
 
-        public List<Movie> getMovies() {
+        public ArrayList<Movie> getMovies() {
             return moviesList;
         }
     }
 
     @Override
-    protected void onPostExecute(List<Movie> movies) {
-        if (movies != null) {
-            mCommand.moviesList = movies;
-            mCommand.execute();
-        } else {
-            mCommand.moviesList = new ArrayList<>();
-        }
+    protected void onPostExecute(ArrayList<Movie> movies) {
+        mCommand.moviesList = movies;
+        mCommand.execute();
     }
 
     @Override
-    protected List<Movie> doInBackground(Void... voids) {
+    protected ArrayList<Movie> doInBackground(Void... voids) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())

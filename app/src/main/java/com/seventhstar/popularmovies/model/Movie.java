@@ -42,7 +42,17 @@ public class Movie implements Parcelable {
 
     private String genresString;
 
-    public Movie(String id, String title, String overview, String releaseDate, String rating, String popularity, String posterPath, String backdropPath, String genresString) {
+    private boolean isFavorite;
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
+    public Movie(String id, String title, String overview, String releaseDate, String rating, String popularity, String posterPath, String backdropPath, String genresString, boolean isFavorite) {
 
         mId = Long.parseLong(id);
         mTitle = title;
@@ -53,6 +63,7 @@ public class Movie implements Parcelable {
         mPoster = posterPath;
         mBackdrop = backdropPath;
         this.genresString = genresString;
+        this.isFavorite = isFavorite;
     }
 
     public String getTitle() {
@@ -181,5 +192,13 @@ public class Movie implements Parcelable {
                 return getGenresString();
         }
         return String.valueOf(mId);
+    }
+
+    public void switchFavorite() {
+        if (isFavorite) {
+            isFavorite = false;
+        } else {
+            isFavorite = true;
+        }
     }
 }

@@ -1,6 +1,8 @@
 package com.seventhstar.popularmovies;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,17 +11,18 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
-import android.view.KeyEvent;
-import android.view.Menu;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.GridView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
-import com.seventhstar.popularmovies.adapters.MovieAdapter;
+import com.seventhstar.popularmovies.adapters.MovieRecyclerAdapter;
 import com.seventhstar.popularmovies.database.MovieEntry;
 import com.seventhstar.popularmovies.model.Movie;
 import com.seventhstar.popularmovies.service.Command;
+import com.seventhstar.popularmovies.service.DBTools;
 import com.seventhstar.popularmovies.service.GetMoviesTask;
 
 import java.util.ArrayList;
@@ -31,7 +34,8 @@ import butterknife.ButterKnife;
 
 @SuppressWarnings("WeakerAccess")
 public class MainActivity extends AppCompatActivity implements
-        GetMoviesTask.Listener, MovieAdapter.Callbacks, LoaderManager.LoaderCallbacks<Cursor> {
+        GetMoviesTask.Listener, MovieRecyclerAdapter.Callbacks, LoaderManager.LoaderCallbacks<Cursor>,
+        MovieRecyclerAdapter.RecycleViewOnItemClickListener {
 
     private final static String POPULAR = "popular";
     private final static String TOP_RATED = "top_rated";
@@ -43,10 +47,10 @@ public class MainActivity extends AppCompatActivity implements
 
     private String mSortBy = POPULAR;
     private String apiKey;
-    private MovieAdapter movieAdapter;
+    private MovieRecyclerAdapter movieRecyclerAdapter;
 
-    @BindView(R.id.movies_grid)
-    GridView gridView;
+    @BindView(R.id.movies_recycler)
+    RecyclerView recyclerView;
 
     @BindView(R.id.pb_loading_indicator)
     ProgressBar mLoadingIndicator;
@@ -63,10 +67,10 @@ public class MainActivity extends AppCompatActivity implements
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(EXTRA_SORT_BY, mSortBy);
-        ArrayList<Movie> movies = (ArrayList<Movie>) movieAdapter.getMovies();
+        ArrayList<Movie> movies = movieRecyclerAdapter.getMovies();
         if (movies != null && !movies.isEmpty()) {
             outState.putParcelableArrayList(EXTRA_MOVIES, movies);
-            outState.putInt(EXTRA_GRID_POSITION, gridView.getFirstVisiblePosition());
+//            outState.putInt(EXTRA_GRID_POSITION, gridView.getFirstVisiblePosition());
         }
     }
 
@@ -77,19 +81,27 @@ public class MainActivity extends AppCompatActivity implements
 
         ButterKnife.bind(this);
 
-        movieAdapter = new MovieAdapter(this);
-        gridView.setAdapter(movieAdapter);
-        gridView.setNumColumns(getResources().getInteger(R.integer.grid_columns_count));
+        movieRecyclerAdapter = new MovieRecyclerAdapter(this, this);
 
-        apiKey = getString(R.string.api_key);
+        recyclerView.setAdapter(movieRecyclerAdapter);
+
+        Resources resources = getResources();
+        int columns = resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
+                ? resources.getInteger(R.integer.main_grid_column_portrait)
+                : resources.getInteger(R.integer.main_grid_column_landscape);
+
+        recyclerView.setLayoutManager(new GridLayoutManager(this, columns));
+        recyclerView.setHasFixedSize(true);
+
+
+        apiKey = BuildConfig.API_KEY;
 
         if (savedInstanceState != null) {
             mSortBy = savedInstanceState.getString(EXTRA_SORT_BY);
 
             if (savedInstanceState.containsKey(EXTRA_MOVIES)) {
                 List<Movie> movies = savedInstanceState.getParcelableArrayList(EXTRA_MOVIES);
-                movieAdapter.refresh(movies);
-                gridView.setSelection(savedInstanceState.getInt(EXTRA_GRID_POSITION));
+                movieRecyclerAdapter.refresh((ArrayList<Movie>) movies);
             }
         } else {
             getMovies();
@@ -158,7 +170,12 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onLoadFinished(Command command) {
         if (command instanceof GetMoviesTask.TaskCompleteNotify) {
-            movieAdapter.refresh(((GetMoviesTask.TaskCompleteNotify) command).getMovies());
+            ArrayList<Movie> movies = ((GetMoviesTask.TaskCompleteNotify) command).getMovies();
+            if (movies == null) {
+                Toast.makeText(this, getString(R.string.api_movie_db_problem), Toast.LENGTH_SHORT).show();
+            } else {
+                movieRecyclerAdapter.refresh(movies);
+            }
         }
         mLoadingIndicator.setVisibility(View.INVISIBLE);
     }
@@ -166,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> cursorLoader, Cursor cursor) {
         if (mSortBy.equals(FAVORITES)) {
-            movieAdapter.fromCursor(cursor);
+            movieRecyclerAdapter.fromCursor(cursor);
         }
         mLoadingIndicator.setVisibility(View.INVISIBLE);
     }
@@ -198,5 +215,20 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
 
+    }
+
+    @Override
+    public void onItemResultRecyclerClick(Movie movie) {
+        openMovie(movie);
+    }
+
+    @Override
+    public void onFavoriteClick(Movie movie) {
+        movie.switchFavorite();
+        if (movie.isFavorite()) {
+            DBTools.makeFavorite(this, movie);
+        } else {
+            DBTools.removeFromFavorite(this, movie);
+        }
     }
 }

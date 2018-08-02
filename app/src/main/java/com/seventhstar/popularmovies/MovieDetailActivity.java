@@ -30,6 +30,7 @@ import com.seventhstar.popularmovies.model.Reviews;
 import com.seventhstar.popularmovies.model.Trailer;
 import com.seventhstar.popularmovies.model.Trailers;
 import com.seventhstar.popularmovies.service.Command;
+import com.seventhstar.popularmovies.service.DBTools;
 import com.seventhstar.popularmovies.service.GetMovieDBDataTask;
 import com.squareup.picasso.Picasso;
 
@@ -38,8 +39,6 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.seventhstar.popularmovies.database.MovieEntry.buildMovieUri;
 
 
 @SuppressWarnings("WeakerAccess")
@@ -198,48 +197,12 @@ public class MovieDetailActivity extends AppCompatActivity implements
 
     @SuppressLint("StaticFieldLeak")
     private void removeFromFavorite() {
-        new AsyncTask<Void, Void, Void>() {
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                resolver.delete(
-                        DBContract.CONTENT_URI,
-                        MovieEntry.COLUMN_MOVIE_API_ID + " = " + movieID,
-                        null);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                isFavorite = false;
-                updateFavoriteButton();
-            }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        DBTools.removeFromFavorite(this, movie);
     }
 
     @SuppressLint("StaticFieldLeak")
     public void makeFavorite() {
-
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                if (!isFavorite()) {
-                    ContentValues contentValues = new ContentValues();
-                    String[] columnNames = MovieEntry.MovieColumns.columnNames();
-                    for (int i = 0; i < 8; i++) {
-                        contentValues.put(columnNames[i], movie.fieldByColumnId(i));
-                    }
-                    resolver.insert(DBContract.CONTENT_URI, contentValues);
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                isFavorite = true;
-                updateFavoriteButton();
-            }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        DBTools.makeFavorite(this, movie);
     }
 
     private void updateFavoriteButton() {
@@ -258,19 +221,7 @@ public class MovieDetailActivity extends AppCompatActivity implements
     }
 
     private boolean isFavorite() {
-        Cursor movieCursor = resolver.query(
-                DBContract.buildMovieUri(movieID),
-                new String[]{MovieEntry.COLUMN_MOVIE_API_ID},
-                null,
-                null,
-                null);
-
-        if (movieCursor != null && movieCursor.moveToFirst()) {
-            movieCursor.close();
-            return true;
-        } else {
-            return false;
-        }
+        return DBTools.isFavorite(this, movieID);
     }
 
     @Override
@@ -329,8 +280,7 @@ public class MovieDetailActivity extends AppCompatActivity implements
 
     @Override
     public void read(Review review) {
-        startActivity(new Intent(Intent.ACTION_VIEW,
-                Uri.parse(review.getUrl())));
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(review.getUrl())));
     }
 
 

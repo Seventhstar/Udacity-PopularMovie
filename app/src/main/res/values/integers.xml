@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="grid_columns_count">2</integer>
+    <integer name="main_grid_column_portrait">2</integer>
+    <integer name="main_grid_column_landscape">3</integer>
 </resources>

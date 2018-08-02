@@ -1,39 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.seventhstar.popularmovies.MainActivity"
-    tools:ignore="MergeRootFrame">
+    android:fitsSystemWindows="true"
+    tools:context=".MainActivity">
 
-    <GridView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/movies_grid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:columnWidth="@dimen/movie_item_width"
-        android:numColumns="auto_fit"
-        android:scrollbars="vertical"
-        android:stretchMode="columnWidth"
-        tools:context=".MainActivityFragment" />
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bnv_main_activity"
+        android:fitsSystemWindows="true">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/movies_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            android:numColumns="auto_fit" />
+
+        <ProgressBar
+            android:id="@+id/pb_loading_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="invisible" />
+    </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bnv_main_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
         android:background="@color/colorPrimaryDark"
         app:itemIconTint="@drawable/drawable_selector"
         app:itemTextColor="@drawable/drawable_selector"
-        android:layout_gravity="bottom"
         app:menu="@menu/sort_by_menu" />
 
-    <ProgressBar
-        android:id="@+id/pb_loading_indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="invisible" />
 
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>

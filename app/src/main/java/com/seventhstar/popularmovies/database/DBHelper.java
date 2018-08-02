@@ -1,12 +1,20 @@
 package com.seventhstar.popularmovies.database;
 
+import android.annotation.SuppressLint;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.AsyncTask;
+
+import com.seventhstar.popularmovies.model.Movie;
 
 class DBHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 7;
     private static final String DATABASE_NAME = "movies.db";
+//    ContentResolver resolver = context.getContentResolver();
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
